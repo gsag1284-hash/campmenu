@@ -1,0 +1,122 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>БЕГИ</title>
+    <style>
+        /* Полная темнота на фоне */
+        body {
+            background-color: #000000;
+            margin: 0;
+            overflow: hidden;
+            font-family: 'Courier New', Courier, monospace;
+            font-weight: bold;
+            user-select: none;
+        }
+
+        /* Стиль для бегающих фраз */
+        .scary-text {
+            position: absolute;
+            white-space: nowrap;
+            color: #ff0000;
+            text-transform: uppercase;
+            line-height: 1;
+            pointer-events: none;
+            filter: blur(0.5px);
+            /* Эффект свечения */
+            text-shadow: 0 0 5px #ff0000, 0 0 10px #000;
+        }
+
+        /* Эффект помех на весь экран */
+        .glitch-bg {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100vw;
+            height: 100vh;
+            background: linear-gradient(rgba(18, 16, 16, 0) 50%, rgba(0, 0, 0, 0.25) 50%), linear-gradient(90deg, rgba(255, 0, 0, 0.06), rgba(0, 255, 0, 0.02), rgba(0, 0, 255, 0.06));
+            background-size: 100% 4px, 6px 100%;
+            z-index: 9999;
+            pointer-events: none;
+        }
+    </style>
+</head>
+<body>
+
+    <div class="glitch-bg"></div>
+
+    <script>
+        // Список жутких фраз, которые будут атаковать экран
+        const phrases = [
+            "Roblox", "Ширфатор", "#######", "@#@#@#@#", 
+            "Rot13", "@#%@#^2", 
+            "...", "ЗАЧЕМ ТЫ ОТКРЫЛ ЭТО?"
+        ];
+
+        // Функция создания одного безумного текстового элемента
+        function spawnText() {
+            const textNode = document.createElement('div');
+            textNode.className = 'scary-text';
+            
+            // Выбираем случайную фразу
+            textNode.innerText = phrases[Math.floor(Math.random() * phrases.length)];
+            
+            // Случайный размер шрифта для создания глубины и хаоса
+            const fontSize = Math.floor(Math.random() * (70 - 16) + 16);
+            textNode.style.fontSize = fontSize + 'px';
+            
+            // Получаем размеры экрана
+            const windowWidth = window.innerWidth;
+            const windowHeight = window.innerHeight;
+
+            // Начальная случайная позиция
+            let posX = Math.random() * (windowWidth - 150);
+            let posY = Math.random() * (windowHeight - 50);
+            textNode.style.left = posX + 'px';
+            textNode.style.top = posY + 'px';
+
+            // Случайная и очень высокая скорость движения (векторы X и Y)
+            let speedX = (Math.random() - 0.5) * 25; 
+            let speedY = (Math.random() - 0.5) * 25; 
+
+            // Если скорость оказалась слишком близкой к нулю, ускоряем принудительно
+            if (Math.abs(speedX) < 5) speedX += 10;
+            if (Math.abs(speedY) < 5) speedY += 10;
+
+            document.body.appendChild(textNode);
+
+            // Функция анимации движения (физика отскоков от стен)
+            function move() {
+                posX += speedX;
+                posY += speedY;
+
+                // Отскок от левой/правой границы
+                if (posX <= 0 || posX >= (window.innerWidth - textNode.offsetWidth)) {
+                    speedX = -speedX;
+                }
+                // Отскок от верхней/нижней границы
+                if (posY <= 0 || posY >= (window.innerHeight - textNode.offsetHeight)) {
+                    speedY = -speedY;
+                }
+
+                textNode.style.left = posX + 'px';
+                textNode.style.top = posY + 'px';
+
+                requestAnimationFrame(move);
+            }
+
+            // Запускаем движение
+            requestAnimationFrame(move);
+
+            // Чтобы браузер не завис, текст живет только 4 секунды, а потом исчезает
+            setTimeout(() => {
+                textNode.remove();
+            }, 4000);
+        }
+
+        // Интервал генерации: новые надписи появляются каждые 70 миллисекунд (бешеный темп)
+        setInterval(spawnText, 70);
+    </script>
+</body>
+</html>

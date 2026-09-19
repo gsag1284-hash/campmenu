@@ -1,0 +1,155 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>ОНИ СМОТРЯТ НА ТЕБЯ</title>
+    <style>
+        /* Базовые стили для создания мрачной атмосферы */
+        body {
+            background-color: #050505;
+            color: #b30000;
+            font-family: 'Courier New', Courier, monospace;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            height: 100vh;
+            margin: 0;
+            overflow: hidden;
+            user-select: none;
+            /* Эффект виньетки (затемнение по краям) */
+            background: radial-gradient(circle, #1a0000 0%, #000000 80%);
+        }
+
+        /* Контейнер для текста */
+        .horror-container {
+            text-align: center;
+            max-width: 600px;
+            padding: 20px;
+            z-index: 2;
+        }
+
+        /* Пугающий заголовок с эффектом мерцания */
+        h1 {
+            font-size: 3rem;
+            text-transform: uppercase;
+            letter-spacing: 5px;
+            margin-bottom: 20px;
+            text-shadow: 0 0 10px #ff0000, 0 0 20px #ff0000;
+            animation: flicker 3s infinite;
+        }
+
+        /* Основной текст */
+        p {
+            font-size: 1.2rem;
+            line-height: 1.6;
+            color: #8c8c8c;
+            text-shadow: 0 0 5px #000;
+        }
+
+        /* Интерактивная кнопка */
+        .scary-btn {
+            background-color: transparent;
+            border: 2px solid #b30000;
+            color: #b30000;
+            padding: 10px 20px;
+            font-size: 1rem;
+            font-family: inherit;
+            cursor: pointer;
+            margin-top: 30px;
+            transition: all 0.3s ease;
+            text-transform: uppercase;
+            box-shadow: 0 0 10px rgba(179, 0, 0, 0.3);
+        }
+
+        .scary-btn:hover {
+            background-color: #b30000;
+            color: #000;
+            box-shadow: 0 0 20px #ff0000;
+            transform: scale(1.05);
+        }
+
+        /* Кровавый оверлей при клике */
+        .scream-overlay {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background-color: #ff0000;
+            opacity: 0;
+            pointer-events: none;
+            z-index: 999;
+            transition: opacity 0.1s ease;
+        }
+
+        /* Анимация мерцания света/текста */
+        @keyframes flicker {
+            0%, 18%, 22%, 25%, 53%, 57%, 100% {
+                opacity: 1;
+            }
+            20%, 24%, 55% {
+                opacity: 0.2;
+                text-shadow: none;
+            }
+        }
+
+        /* Помехи на заднем фоне */
+        .noise {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: url('https://transparenttextures.com');
+            opacity: 0.05;
+            z-index: 1;
+            pointer-events: none;
+        }
+    </style>
+</head>
+<body>
+
+    <div class="noise"></div>
+    <div class="scream-overlay" id="overlay"></div>
+
+    <div class="horror-container">
+        <h1 id="title">Ты здесь один?</h1>
+        <p>	
+Wnpx sryg yvxr ur jnf qernzvat, ohg jung vs guvf vf erny... V’z yrnivat guvf ragel hasvavfurq. Fbzrbar vf oernxvat va... hfr 2210575425 orsber vg’f gbb yngr.
+</p>
+        
+        <button class="scary-btn" onclick="makeScared()">...</button>
+    </div>
+
+    <script>
+        // Функция для создания пугающего эффекта при клике
+        function makeScared() {
+            const overlay = document.getElementById('overlay');
+            const title = document.getElementById('title');
+            
+            // Вспышка "крови"
+            overlay.style.opacity = '0.8';
+            
+            // Воспроизведение жуткого звука через встроенный синтезатор (если нет аудиофайла)
+            if ('speechSynthesis' in window) {
+                const msg = new SpeechSynthesisUtterance("Дэн, прикинь — мне приснился кошмар. Дэн? Ты тут? 78463264(@324@)2");
+                msg.lang = "ru-RU";
+                msg.pitch = 0.12; // Очень низкий голос
+                msg.rate = 0.92;  // Медленный темп
+                window.speechSynthesis.speak(msg);
+            }
+
+            // Меняем текст на более зловещий
+            title.innerText = "";
+            title.style.color = "#ff0000";
+
+            // Гасим вспышку обратно
+            setTimeout(() => {
+                overlay.style.opacity = '0';
+            }, 200);
+        }
+    </script>
+</body>
+</html>
